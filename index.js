@@ -5,6 +5,9 @@ const http = require('http');
 const app = express();
 const socketio = require('socket.io');
 
+const NodeCache = require("node-cache");
+const msgCache = new NodeCache({stdTTL: 60 * 15, checkperiod: 120});
+
 const server = http.createServer(app);
 const io = socketio(server);
 const room = "mainchat"
@@ -14,21 +17,13 @@ const {
     userLeave,
     checkUsername,
     getUsers,
-    checkFull
+    checkFull,
+    checkMessage
 } = require("./public/utils/users.js");
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// make sure that message is not empty
-// and is not too long
-function checkMessage(message) {
-    if (message.length <= 0 || message.length > 300) {
-        return true
-    }
-    else {
-        return false
-    }
-}
+
 
 io.on('connection', (socket) => {
 
@@ -52,6 +47,15 @@ io.on('connection', (socket) => {
             io.to(room).emit('server message', `${name} has joined the chat!`);
             io.emit('add to online list', name);
             socket.emit('disable username button');
+            // populate message history here
+            let msgs = msgCache.keys();
+            for (const k of msgs) {
+                let msg = msgCache.get(k);
+                if (msg !== undefined) {
+                    socket.emit('message', msg.name, msg.msg);
+                }
+            }
+            // initial inactivity timer set
             logoffTimer = setTimeout(() => {
                 socket.emit('alert', 'You have been logged off for inactivity');
                 socket.disconnect();
@@ -65,12 +69,15 @@ io.on('connection', (socket) => {
         }
         else {
             if (checkMessage(message)) {
-                socket.emit('alert', 'Message is too long (1000 char limit) or empty!');
+                socket.emit('alert', 'Message is too long (300 char limit) or empty!');
             }
             else {
                 clearTimeout(logoffTimer);
                 socket.broadcast.to(room).emit('message', name, message);
                 socket.emit('self message', message)
+                // cache message on success 
+                let curTime = new Date();
+                msgCache.set(curTime.getTime().toString(), {'name': name, 'msg': message});
                 // after a succesfull message disable the user from sending another message for three seconds
                 socket.emit('message timeout');
                 // set new logoffTimer

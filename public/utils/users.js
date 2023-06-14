@@ -17,6 +17,17 @@ function checkUsername(username) {
     return true;
 }
 
+// make sure that message is not empty
+// and is not too long
+function checkMessage(message) {
+    if (message.length <= 0 || message.length > 300) {
+        return true
+    }
+    else {
+        return false
+    }
+}
+
 // chat room can only have 15 users at a time
 function checkFull() {
     if (users.length >= 15) {
@@ -49,5 +60,6 @@ module.exports = {
     userLeave,
     checkUsername,
     getUsers,
-    checkFull
+    checkFull,
+    checkMessage
 }

@@ -2,7 +2,7 @@
 
 Simple single page webchat application that I made with [socket.io](https://socket.io/)
 
-The chat room can contain fifteen users at a time. Users will be disconnected for inactivity every fifteen minutes and only users who have joined the chat room can view the messages. Additionally there is a three second timeout after sending a message to prevent users from spamming the chat. I built the frontend using bare html / css with bootstrap styling.
+The chat room can contain fifteen users at a time. Users will be disconnected for inactivity every fifteen minutes and only users who have joined the chat room can view the messages. I built the frontend using html / css with bootstrap styling. On the backend I'm using node.js with socket.io for most of the functionality as well as node-cache to store recently sent messages.
 
 To run the application make sure you have npm and node.js installed on your machine.
 
@@ -16,7 +16,9 @@ and run the application on localhost at port 3000 using
 
 ![](docs/example.gif)
 
-Possible expansions for this application are adding multiple chat rooms as well implimenting a cache to store recent message history. The cache could be implimented using a redis db where previous messages have a ttl.
+Improvments to make
 
-In the future I would like to host this application on heroku and impliment a recent message cache.
+- [x] Add caching for recently sent messages 
+- [ ] Add multiple chat rooms
+- [ ] Deploy on heroku
 
