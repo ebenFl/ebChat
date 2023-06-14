@@ -1,0 +1,13 @@
+{
+  "name": "EbChat",
+  "version": "0.0.1",
+  "description": "Simple one page chat website",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.6.1"
+  }
+}

@@ -1,0 +1,43 @@
+.content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    border: 2px solid black;
+}
+
+.container {
+    display: grid;
+    grid-template-rows: 400px 100px;
+    grid-template-columns: 200px 500px;
+}
+
+.online-list {
+    grid-column: 1;
+    grid-row: 1;
+    overflow: scroll;
+    border: 3px solid black;
+}
+
+.message-box {
+    grid-column: 2;
+    grid-row: 1;
+    overflow:scroll;
+    background: grey;
+    border: 3px solid black;
+}
+
+.messanger {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+    justify-self: center;
+    align-self: center;
+}
+
+ul {
+    display: table;
+    width: 100%;
+    overflow: scroll;
+    list-style-type: none;
+}
